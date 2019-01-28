@@ -1,2 +1,1 @@
-# mobile-app-ws
-Java Springboot - MySQL
+# Java Springboot - MySQL
