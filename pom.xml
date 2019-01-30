@@ -15,7 +15,7 @@
 	<name>mobile-app-ws</name>
 	<description>Basic lesson that i bought from udemy, may be useful for you :) </description>
 
-	<!-- i just test for commit -->
+	<!-- start -->
 	
 	<properties>
 		<java.version>1.8</java.version>
