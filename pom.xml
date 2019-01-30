@@ -13,8 +13,10 @@
 	<artifactId>mobile-app-ws</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mobile-app-ws</name>
-	<description>Basic lesson that i bought from udemy, may be useful for you :)</description>
+	<description>Basic lesson that i bought from udemy, may be useful for you :) </description>
 
+	<!-- i just test for commit -->
+	
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
