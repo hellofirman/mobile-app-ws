@@ -3,7 +3,7 @@ package com.hellofirman.mobileappws.shared.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.hellofirman.mobileappws.entity.UserEntity;
+import com.hellofirman.mobileappws.io.entity.UserEntity;
 
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long>{

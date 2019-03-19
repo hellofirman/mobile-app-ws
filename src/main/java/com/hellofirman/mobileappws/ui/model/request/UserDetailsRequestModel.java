@@ -1,17 +1,11 @@
-package com.hellofirman.mobileappws.model.response;
+package com.hellofirman.mobileappws.ui.model.request;
 
-public class UserRest {
+public class UserDetailsRequestModel {
 
-	public String userId;
-	public String firstName;
-	public String lastName;
-	public String email;
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String password;
 	public String getFirstName() {
 		return firstName;
 	}
@@ -29,6 +23,12 @@ public class UserRest {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

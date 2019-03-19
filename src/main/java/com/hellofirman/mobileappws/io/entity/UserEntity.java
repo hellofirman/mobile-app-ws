@@ -1,4 +1,4 @@
-package com.hellofirman.mobileappws.entity;
+package com.hellofirman.mobileappws.io.entity;
 
 import java.io.Serializable;
 

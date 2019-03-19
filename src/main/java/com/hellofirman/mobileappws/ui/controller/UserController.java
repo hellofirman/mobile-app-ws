@@ -1,4 +1,4 @@
-package com.hellofirman.mobileappws.controller;
+package com.hellofirman.mobileappws.ui.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hellofirman.mobileappws.model.request.UserDetailsRequestModel;
-import com.hellofirman.mobileappws.model.response.UserRest;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
+import com.hellofirman.mobileappws.ui.model.request.UserDetailsRequestModel;
+import com.hellofirman.mobileappws.ui.model.response.UserRest;
 
 
 @RestController

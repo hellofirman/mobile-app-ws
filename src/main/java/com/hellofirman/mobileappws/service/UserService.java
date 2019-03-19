@@ -1,7 +1,9 @@
 package com.hellofirman.mobileappws.service;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.hellofirman.mobileappws.shared.dto.UserDto;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 	UserDto createUser(UserDto user);
 }

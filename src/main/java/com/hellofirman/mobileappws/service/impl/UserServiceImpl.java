@@ -1,11 +1,16 @@
 package com.hellofirman.mobileappws.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hellofirman.mobileappws.entity.UserEntity;
+import com.hellofirman.mobileappws.io.entity.UserEntity;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.Utils;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
@@ -44,6 +49,15 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(storedUserDetails, returnValue);
 		
 		return returnValue;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		UserEntity userEntity = userRepository.findUserByEmail(email);
+		
+		if(userEntity == null) throw new UsernameNotFoundException(email);
+				
+		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 	}
 
 }
