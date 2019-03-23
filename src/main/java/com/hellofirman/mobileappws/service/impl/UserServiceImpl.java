@@ -11,10 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hellofirman.mobileappws.io.entity.UserEntity;
+import com.hellofirman.mobileappws.io.repositories.UserRepository;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.Utils;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
-import com.hellofirman.mobileappws.shared.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -58,6 +58,17 @@ public class UserServiceImpl implements UserService {
 		if(userEntity == null) throw new UsernameNotFoundException(email);
 				
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+	}
+
+	@Override
+	public UserDto getUser(String email) {
+		UserEntity userEntity = userRepository.findUserByEmail(email);
+		
+		if(userEntity == null) throw new UsernameNotFoundException(email); // for message error not found 
+		
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
 	}
 
 }

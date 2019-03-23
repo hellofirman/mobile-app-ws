@@ -12,10 +12,17 @@ public class MobileAppWsApplication {
 		SpringApplication.run(MobileAppWsApplication.class, args);
 	}
 
+	//for security
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	} 
+	
+	//for spring app context
+	@Bean
+	public SpringApplicationContext applicationContext() {
+		return new SpringApplicationContext();
+	}
 	
 }
 
