@@ -25,7 +25,6 @@ public class UserController {
 	
 	@GetMapping
 	public String getUser() {
-		//default
 		return "get users was called";
 	}
 	
