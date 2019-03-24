@@ -23,7 +23,6 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
-		
 	@GetMapping(path="/{userId}")
 	public UserRest getUser(@PathVariable String userId) {
 		UserRest returnValue = new UserRest();
