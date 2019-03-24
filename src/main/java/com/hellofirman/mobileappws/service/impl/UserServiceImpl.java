@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 		/* Changing message value for output 
 		 * from  "message": "could not execute statement; SQL [n/a]; constraint [UK_6dotkott2kjsp8vw4d0m25fb7]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement",
 		 * to be "message": "The users.email already exists"*/
-		if(userRepository.findUserByEmail(user.getEmail()) != null) throw new RuntimeException("The users.email already exists"); 
+		if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("The users.email already exists"); 
 		
 		UserEntity userEntity = new UserEntity();
 		BeanUtils.copyProperties(user, userEntity);
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserEntity userEntity = userRepository.findUserByEmail(email);
+		UserEntity userEntity = userRepository.findByEmail(email);
 		
 		if(userEntity == null) throw new UsernameNotFoundException(email);
 				
@@ -62,12 +62,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto getUser(String email) {
-		UserEntity userEntity = userRepository.findUserByEmail(email);
+		UserEntity userEntity = userRepository.findByEmail(email);
 		
 		if(userEntity == null) throw new UsernameNotFoundException(email); // for message error not found 
 		
 		UserDto returnValue = new UserDto();
 		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
+	}
+
+	@Override
+	public UserDto getUserByUserId(String userId) {
+		UserEntity userEntity = userRepository.findByUserId(userId);
+		
+		if(userEntity == null) throw new UsernameNotFoundException(userId);
+		
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		
 		return returnValue;
 	}
 

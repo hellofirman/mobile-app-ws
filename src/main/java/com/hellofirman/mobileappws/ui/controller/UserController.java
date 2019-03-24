@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,15 +18,20 @@ import com.hellofirman.mobileappws.ui.model.response.UserRest;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController {
 
 	@Autowired
 	UserService userService;
-	
-	@GetMapping
-	public String getUser() {
-		return "get users was called";
+		
+	@GetMapping(path="/{userId}")
+	public UserRest getUser(@PathVariable String userId) {
+		UserRest returnValue = new UserRest();
+		
+		UserDto userDto = userService.getUserByUserId(userId);
+		BeanUtils.copyProperties(userDto, returnValue);
+		
+		return returnValue;
 	}
 	
 	@PostMapping
@@ -39,6 +45,9 @@ public class UserController {
 		BeanUtils.copyProperties(createUser, returnValue);
 		
 		return returnValue;
+		
+		//OK - CONFLICT - CREATED - NO_CONTENT - etc
+		//return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
 	}
 	
 	@PutMapping
