@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
 import com.hellofirman.mobileappws.ui.model.request.UserDetailsRequestModel;
+import com.hellofirman.mobileappws.ui.model.response.ErrorMessagesEnum;
 import com.hellofirman.mobileappws.ui.model.response.UserRest;
 
 
@@ -42,8 +43,11 @@ public class UserController {
 			consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
 			produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
 			)
-	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
+		
+		if(userDetails.getFirstName().isEmpty()) 
+			throw new Exception(ErrorMessagesEnum.MISSING_REQUIRED_FIELD.getErrorMessage());
 		
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
