@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hellofirman.mobileappws.exceptions.UserServiceException;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
 import com.hellofirman.mobileappws.ui.model.request.UserDetailsRequestModel;
@@ -46,8 +47,16 @@ public class UserController {
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
 		
-		if(userDetails.getFirstName().isEmpty()) 
-			throw new Exception(ErrorMessagesEnum.MISSING_REQUIRED_FIELD.getErrorMessage());
+		if(userDetails.getFirstName().isEmpty()) {
+			// Default Exception Msg
+			throw new Exception(ErrorMessagesEnum.MISSING_REQUIRED_FIELD.getErrorMessage() + " FirstName"); 
+		}else if(userDetails.getLastName().isEmpty()) {
+			// AppExceptionsHandler.handleUserServiceException
+			throw new UserServiceException(ErrorMessagesEnum.MISSING_REQUIRED_FIELD.getErrorMessage() +  " LastName");
+		}else if(userDetails.getEmail().isEmpty()) {
+			// AppExceptionsHandler.handleOtherExceptions
+			throw new NullPointerException("Email cannot be Empty");
+		}
 		
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userDetails, userDto);
@@ -56,9 +65,6 @@ public class UserController {
 		BeanUtils.copyProperties(createUser, returnValue);
 		
 		return returnValue;
-		
-		//MSG: OK - CONFLICT - CREATED - NO_CONTENT - etc
-		//return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
 	}
 	
 	@PutMapping
