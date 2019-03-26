@@ -17,6 +17,9 @@ import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
 import com.hellofirman.mobileappws.ui.model.request.UserDetailsRequestModel;
 import com.hellofirman.mobileappws.ui.model.response.ErrorMessagesEnum;
+import com.hellofirman.mobileappws.ui.model.response.OperationStatusModel;
+import com.hellofirman.mobileappws.ui.model.response.RequestOperationName;
+import com.hellofirman.mobileappws.ui.model.response.RequestOperationStatus;
 import com.hellofirman.mobileappws.ui.model.response.UserRest;
 
 
@@ -88,9 +91,18 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@DeleteMapping
-	public String deleteUser() {
-		return "delete users was called";
+	@DeleteMapping(
+			path="/{userId}",
+			produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+		)
+	public OperationStatusModel deleteUser(@PathVariable String userId) {
+		OperationStatusModel returnValue = new OperationStatusModel();
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+		
+		userService.deleteUser(userId);
+		
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		return returnValue;
 	}
 	
 }
