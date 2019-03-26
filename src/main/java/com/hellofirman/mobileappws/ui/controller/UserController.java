@@ -28,7 +28,8 @@ public class UserController {
 	UserService userService;
 	
 	//produces --> for return result with xml and json
-	@GetMapping(path="/{userId}",
+	@GetMapping(
+			path="/{userId}",
 			produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE} )
 	public UserRest getUser(@PathVariable String userId) {
 		UserRest returnValue = new UserRest();
@@ -43,7 +44,7 @@ public class UserController {
 	@PostMapping(
 			consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
 			produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-			)
+		)
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
 		
@@ -67,9 +68,24 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@PutMapping
-	public String updateUser() {
-		return "update users was called";
+	@PutMapping(
+			path="/{userId}",
+			consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+			produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+		)
+	public UserRest updateUser(
+			@PathVariable String userId, 
+			@RequestBody UserDetailsRequestModel userDetails) {
+		
+		UserRest returnValue = new UserRest();
+		
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userDetails, userDto);
+		
+		UserDto updateUser = userService.updateUser(userId, userDto);
+		BeanUtils.copyProperties(updateUser, returnValue);
+		
+		return returnValue;
 	}
 	
 	@DeleteMapping

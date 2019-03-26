@@ -10,11 +10,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hellofirman.mobileappws.exceptions.UserServiceException;
 import com.hellofirman.mobileappws.io.entity.UserEntity;
 import com.hellofirman.mobileappws.io.repositories.UserRepository;
 import com.hellofirman.mobileappws.service.UserService;
 import com.hellofirman.mobileappws.shared.Utils;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
+import com.hellofirman.mobileappws.ui.model.response.ErrorMessage;
+import com.hellofirman.mobileappws.ui.model.response.ErrorMessagesEnum;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -79,6 +82,23 @@ public class UserServiceImpl implements UserService {
 		
 		UserDto returnValue = new UserDto();
 		BeanUtils.copyProperties(userEntity, returnValue);
+		
+		return returnValue;
+	}
+
+	@Override
+	public UserDto updateUser(String userId, UserDto userDto) {
+		UserDto returnValue = new UserDto();
+		UserEntity userEntity = userRepository.findByUserId(userId);
+		
+		if(userEntity == null) 
+			throw new UserServiceException(ErrorMessagesEnum.NO_RECORD_FOUND.getErrorMessage());
+		
+		userEntity.setFirstName(userDto.getFirstName());
+		userEntity.setLastName(userDto.getLastName());
+		
+		UserEntity updatedUserDetails = userRepository.save(userEntity);
+		BeanUtils.copyProperties(updatedUserDetails, returnValue);
 		
 		return returnValue;
 	}}
