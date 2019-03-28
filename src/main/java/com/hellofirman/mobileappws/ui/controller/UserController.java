@@ -3,6 +3,7 @@ package com.hellofirman.mobileappws.ui.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -66,11 +67,18 @@ public class UserController {
 			throw new NullPointerException("Email cannot be Empty");
 		}
 		
-		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userDetails, userDto);
+		//#1 - Mapper with beanUtils
+		//UserDto userDto = new UserDto();
+		//BeanUtils.copyProperties(userDetails, userDto);
+		//UserDto createdUser = userService.createUser(userDto);
+		//BeanUtils.copyProperties(createdUser, returnValue);
 		
-		UserDto createUser = userService.createUser(userDto);
-		BeanUtils.copyProperties(createUser, returnValue);
+		//#2 - Mapper with modelmapper
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+		
+		UserDto createdUser = userService.createUser(userDto);
+		returnValue = modelMapper.map(createdUser, UserRest.class);
 		
 		return returnValue;
 	}
