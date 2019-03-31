@@ -43,8 +43,10 @@ public class UserServiceImpl implements UserService {
 		/* Changing message value for output 
 		 * from  "message": "could not execute statement; SQL [n/a]; constraint [UK_6dotkott2kjsp8vw4d0m25fb7]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement",
 		 * to be "message": "The users.email already exists"*/
-		if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("The users.email already exists"); 
+		if(userRepository.findByEmail(user.getEmail()) != null) 
+			throw new RuntimeException("The users.email already exists"); 
 		
+		//we need looping address for set address_id from idGenerator
 		for(int i=0; i<user.getAddresses().size();i++) {
 			AddressDto address = user.getAddresses().get(i);
 			address.setUserDetails(user);

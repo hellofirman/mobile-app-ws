@@ -1,9 +1,11 @@
 package com.hellofirman.mobileappws.ui.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hellofirman.mobileappws.exceptions.UserServiceException;
+import com.hellofirman.mobileappws.service.AddressService;
 import com.hellofirman.mobileappws.service.UserService;
+import com.hellofirman.mobileappws.shared.dto.AddressDto;
 import com.hellofirman.mobileappws.shared.dto.UserDto;
 import com.hellofirman.mobileappws.ui.model.request.UserDetailsRequestModel;
+import com.hellofirman.mobileappws.ui.model.response.AddressesRest;
 import com.hellofirman.mobileappws.ui.model.response.ErrorMessagesEnum;
 import com.hellofirman.mobileappws.ui.model.response.OperationStatusModel;
 import com.hellofirman.mobileappws.ui.model.response.RequestOperationName;
@@ -35,6 +40,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	AddressService addressService;
+	
 	//produces --> for return result with xml and json
 	@GetMapping(
 			path="/{userId}",
@@ -43,7 +51,13 @@ public class UserController {
 		UserRest returnValue = new UserRest();
 		
 		UserDto userDto = userService.getUserByUserId(userId);
-		BeanUtils.copyProperties(userDto, returnValue);
+		
+		//#1 - Mapper with beanUtils
+		//BeanUtils.copyProperties(userDto, returnValue);
+		
+		//#2 - Mapper with modelmapper
+		ModelMapper modelMapper = new ModelMapper();
+		returnValue = modelMapper.map(userDto, UserRest.class);
 		
 		return returnValue;
 	}
@@ -141,4 +155,38 @@ public class UserController {
 		return returnValue;
 	}
 	
+	// http://localhost:8080/mobile-app-ws/users/kfhvgiuycsdvhcbsdbcuy/addressses
+	@GetMapping(
+			path = "/{userId}/addresses", 
+			produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE}
+	)
+	public List<AddressesRest> getUserAddresses(@PathVariable String userId) {
+		
+		List<AddressesRest> returnValue = new ArrayList<>();
+		
+		List<AddressDto> addressesDto = addressService.getAddresses(userId);
+		
+		if(addressesDto != null && !addressesDto.isEmpty()) {
+			Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
+			returnValue = new ModelMapper().map(addressesDto, listType);
+		}
+		
+		return returnValue;
+	}
+		
+	// http://localhost:8080/mobile-app-ws/users/kfhvgiuycsdvhcbsdbcuy/addressses/asadaksdhaiogd8aygduas
+	@GetMapping(path = "/{userId}/addresses/{addressId}", 
+			produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE }
+	)
+	public AddressesRest getOneUserAddress(@PathVariable String addressId) {
+
+		AddressDto addressesDto = addressService.getAddress(addressId);
+
+		ModelMapper modelMapper = new ModelMapper();
+		
+		return modelMapper.map(addressesDto, AddressesRest.class);
+	}
+		
 }
